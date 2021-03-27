@@ -1,5 +1,5 @@
 # My-EPITECH-Project
 
-PROJECT			LANGUAGE		DESCRIPTION
-
-mysokoban 	C						Create a sokoban game
+PROJECT     :   mysokoban
+LANGUAGE    :   C
+DESCRIPTION :   Create a sokoban game
