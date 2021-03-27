@@ -1,4 +1,4 @@
-# My-EPITECH-Project
+# First Year EPITECH Project
 
 PROJECT     :   mysokoban
 
