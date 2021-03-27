@@ -13,3 +13,22 @@ LANGUAGE    :   C
 
 DESCRIPTION :   Sorting number algorithm
 ______________________________________
+
+PROJECT     :   BSQ
+
+LANGUAGE    :   C
+
+DESCRIPTION :   Find biggest square in a map
+______________________________________
+
+PROJECT     :   myprintf
+
+LANGUAGE    :   C
+
+DESCRIPTION :   create printf function
+______________________________________
+
+PROJECT     :   popeye(Docker)
+
+DESCRIPTION :   Create images and docker compose
+______________________________________
