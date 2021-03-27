@@ -27,3 +27,8 @@ LANGUAGE    :   C
 
 DESCRIPTION :   create printf function
 ______________________________________
+
+PROJECT     :   popeye(Docker)
+
+DESCRIPTION :   Create images and docker compose
+______________________________________
