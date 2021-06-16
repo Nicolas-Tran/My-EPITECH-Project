@@ -47,3 +47,16 @@ LANGUAGE    :   CSFML
 DESCRIPTION :   Create a endless runner
 ______________________________________
 
+PROJECT     :   epytodo
+
+LANGUAGE    :   Javascript
+
+DESCRIPTION :   Create a database and routing
+______________________________________
+
+PROJECT     :   matchstick
+
+LANGUAGE    :   C
+
+DESCRIPTION :   Create a matchstick, the one who takes the last match loses
+
