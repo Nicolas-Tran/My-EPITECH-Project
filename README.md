@@ -32,3 +32,18 @@ PROJECT     :   popeye(Docker)
 
 DESCRIPTION :   Create images and docker compose
 ______________________________________
+
+PROJECT     :   myhunter
+
+LANGUAGE    :   CSFML
+
+DESCRIPTION :   Create a DuckHunt game
+______________________________________
+
+PROJECT     :   myrunner
+
+LANGUAGE    :   CSFML
+
+DESCRIPTION :   Create a endless runner
+______________________________________
+
