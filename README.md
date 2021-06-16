@@ -1,7 +1,3 @@
 # My-EPITECH-Project
 
-PROJECT     :   mysokoban
-
-LANGUAGE    :   C
-
-DESCRIPTION :   Create a sokoban game
+Go to branch master to see my projects
