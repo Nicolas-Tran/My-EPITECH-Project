@@ -13,7 +13,7 @@ const port = 8000;
 
 const MongoClient = require("mongodb").MongoClient;
 const url =
-  "mongodb+srv://root:F6jfhm90nXgRYHMw@cluster0.eccfpfg.mongodb.net/test";
+  "YOUR_MONGO_LINK";
 let db;
 
 MongoClient.connect(url, (err, client) => {
