@@ -1,0 +1,64 @@
+---
+- name: "Update apt cache"
+  become: true
+  command: apt-get update --allow-releaseinfo-change
+
+- name: "Install NGINX"
+  apt:
+    name: nginx
+    state: present
+
+- name: "Enable NGINX's service"
+  systemd:
+    name: nginx
+    enabled: yes
+
+- name: "Set owner and group for /var/www"
+  file:
+    path: /var/www/
+    owner: "{{ www_data }}"
+    group: "{{ www_data }}"
+    mode: "0755"
+    # file permissions: do anything with the file or directory, and other users can read and execute it but not alter it
+    # owner can read/write/execute, group/others can read/execute
+
+- name: "Verify that back is correctly imported"
+  stat:
+    path: "/var/www/back"
+  register: app_data
+
+- name: "Report if back is correctly imported"
+  debug:
+    msg: "The app folder existed at /var/www"
+  when: app_data.stat.exists
+
+- name: "Import project"
+  copy:
+    src: ../../app/back
+    dest: /var/www/
+  when: app_data.stat.exists == False
+
+- name: "Create directory for server block configuration"
+  file:
+    path: /etc/nginx/conf.d
+    state: directory
+    mode: "0755"
+
+- name: "Configuration for server block"
+  template:
+    src: templates/back.j2
+    dest: /etc/nginx/sites-available/back
+
+- name: "Activate new virtual host configuration file"
+  shell: sudo ln -s /etc/nginx/sites-available/back /etc/nginx/sites-enabled/
+  args:
+    creates: /etc/nginx/sites-enabled/back
+
+- name: "Confirm that NGINX configuration does not have any syntax errors"
+  shell: sudo nginx -t
+
+- name: "Restart nginx service"
+  systemd:
+    name: nginx
+    state: restarted
+...

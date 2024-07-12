@@ -1,0 +1,6 @@
+---
+- name: "CI pipeline"
+  hosts: localhost
+  become: true
+  roles:
+    - ci

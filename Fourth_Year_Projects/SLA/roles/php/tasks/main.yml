@@ -1,0 +1,40 @@
+---
+- name: "Update apt cache"
+  become: true
+  command: apt-get update --allow-releaseinfo-change
+
+- name: "Install PHP"
+  become: yes
+  apt:
+    name: "{{ php_version }}"
+    state: present
+
+- name: "Install PHP's extensions"
+  apt:
+    name: "{{ php_version }}-{{ item }}"
+    state: present
+  with_items:
+    - fpm
+    - cli
+    - pdo
+    - mysqli
+    - zip
+    - gd
+    - mbstring
+    - curl
+    - xml
+    - bcmath
+    - intl
+
+- name: "Install unzip"
+  become: yes
+  apt:
+    name: unzip
+    state: present
+
+- name: Install curl
+  become: true
+  apt:
+    name: curl
+    state: present
+...

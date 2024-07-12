@@ -1,0 +1,27 @@
+---
+- name: Install & Start MySQL server lates version
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - python3-mysqldb
+    - python3-selinux
+    - python3-semanage
+
+- name: Configure SELinux to start mysql on any port
+  seboolean: name=mysql_connect_any state=true persistent=yes
+  when: ansible_selinux.status == "enabled"
+
+- name: Copy MySQL configuration file
+  template: src=my.cnf.j2 dest=/etc/mysql/mariadb.conf.d/50-server.cnf
+  notify:
+    - restart mysql
+
+- name: Start the MySQL service
+  service: name=mysql state=started enabled=yes
+
+- name: Create Application Database
+  mysql_db: name="{{ mysql_db }}" state=present
+
+- name: Create Application DB User
+  mysql_user: name="{{ mysql_user }}" password="{{ mysql_password }}" priv=*.*:ALL host='%' state=present

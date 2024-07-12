@@ -1,0 +1,17 @@
+---
+- name: "Verify if app existed on VM"
+  stat:
+    path: "/var/www/back"
+  register: app_data
+
+- name: "Report if app existed"
+  debug:
+    msg: "The back folder existed at /var/www"
+  when: app_data.stat.exists
+
+- name: "Import project"
+  copy:
+    src: /T-NSA-700-PAR_24/app/back/
+    dest: /var/www/
+  when: app_data.stat.exists == False
+...

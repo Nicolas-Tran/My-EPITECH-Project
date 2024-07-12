@@ -1,0 +1,121 @@
+---
+- name: "Clear Composer cache"
+  become: true
+  command: composer clear-cache
+  args:
+    chdir: app/back
+
+- name: "Update composer"
+  environment:
+    COMPOSER_ALLOW_SUPERUSER: "1"
+  composer:
+    command: update
+    working_dir: app/back
+
+- name: "Install Composer dependencies"
+  environment:
+    COMPOSER_ALLOW_SUPERUSER: "1"
+  composer:
+    command: install
+    global_command: false
+    working_dir: app/back
+
+- name: "Update dependencies"
+  become: yes
+  composer:
+    command: require
+    arguments: laravel/framework:5.8.*
+    working_dir: app/back
+
+#- name: Debug DB_HOST
+#  debug:
+#    var: db_host
+#
+#- name: Debug DB_PORT
+#  debug:
+#    var: db_port
+#
+#- name: Debug DB_DATABASE
+#  debug:
+#    var: db_database
+#
+#- name: Debug DB_USERNAME
+#  debug:
+#    var: db_username
+#
+#- name: Debug DB_PASSWORD
+#  debug:
+#    var: db_password
+
+- name: Replace DB_HOST placeholder with actual value
+  replace:
+    path: .env.ci
+    regexp: '{{ "DB_HOST={{db_host}}" }}'
+    replace: 'DB_HOST={{ db_host }}'
+
+- name: Replace DB_PORT placeholder with actual value
+  replace:
+    path: .env.ci
+    regexp: '{{ "DB_PORT={{db_port}}" }}'
+    replace: 'DB_PORT={{ db_port }}'
+
+- name: Replace DB_DATABASE placeholder with actual value
+  replace:
+    path: .env.ci
+    regexp: '{{ "DB_DATABASE={{db_database}}" }}'
+    replace: 'DB_DATABASE={{ db_database }}'
+
+- name: Replace DB_USERNAME placeholder with actual value
+  replace:
+    path: .env.ci
+    regexp: '{{ "DB_USERNAME={{db_username}}" }}'
+    replace: 'DB_USERNAME={{ db_username }}'
+
+- name: Replace DB_PASSWORD placeholder with actual value
+  replace:
+    path: .env.ci
+    regexp: '{{ "DB_PASSWORD={{db_password}}" }}'
+    replace: 'DB_PASSWORD={{ db_password }}'
+
+# see how we can use this to simplify the task
+#- name: Replace placeholders with actual values
+#  replace:
+#    path: .env.ci
+#    regexp: '{{ item.regex }}'
+#    replace: '{{ item.replace }}'
+#  loop:
+#    - { regex: '{{ "DB_HOST={{db_host}}" }}', replace: 'DB_HOST={{ db_host }}' }
+#    - { regex: '{{ "DB_PORT={{db_port}}" }}', replace: 'DB_PORT={{ db_port }}' }
+#    - { regex: '{{ "DB_DATABASE={{db_database}}" }}', replace: 'DB_DATABASE={{ db_database }}' }
+#    - { regex: '{{ "DB_USERNAME={{db_username}}" }}', replace: 'DB_USERNAME={{ db_username }}' }
+#    - { regex: '{{ "DB_PASSWORD={{db_password}}" }}', replace: 'DB_PASSWORD={{ db_password }}' }
+
+
+- name: "Copy .env"
+  copy:
+    src: ../../.env.ci
+    dest: app/back/.env
+
+- name: "Generate key"
+  become: yes
+  command: sudo php artisan key:generate
+  args:
+    chdir: app/back
+
+- name: "Run tests"
+  become: yes
+  command: vendor/bin/phpunit
+  args:
+    chdir: app/back
+  register: test_output
+
+- name: "Extract number of tests passed"
+  set_fact:
+    passed_tests: "{{ test_output.stdout | regex_findall('(?<=OK \\()\\d+') | first | int }}"
+  when: test_output.stdout is defined and test_output.stdout != ''
+
+- name: "Print number of tests passed"
+  ansible.builtin.debug:
+    msg: "Number of tests passed: {{ passed_tests }}"
+  when: passed_tests is defined
+...

@@ -1,0 +1,8 @@
+---
+- name: "Template VM"
+  hosts: "front"
+  become: true
+  roles:
+    - front
+    - apache
+...

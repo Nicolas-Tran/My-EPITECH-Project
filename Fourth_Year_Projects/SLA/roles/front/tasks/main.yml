@@ -1,0 +1,74 @@
+---
+- name: Update package cache
+  apt:
+    update_cache: yes
+
+- name: Install required packages
+  apt:
+    name:
+      - build-essential
+      - curl
+      - git
+    state: present
+
+- name: Install nvm
+  become_user: nsa
+  shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash"
+
+- name: Install Node.js via NVM
+  become_user: nsa
+  shell: "/bin/bash -c 'source ~/.nvm/nvm.sh && nvm install 9.4 && nvm alias default 9.4'"
+
+- name: Download Python 2.7
+  get_url:
+    url: "https://www.python.org/ftp/python/2.7/Python-2.7.tgz"
+    dest: "/tmp/Python-2.7.tgz"
+
+- name: Extract Python 2.7
+  shell: "tar -xzf /tmp/Python-2.7.tgz"
+  args:
+    chdir: "/tmp"
+
+- name: "Verify if app existed on VM"
+  stat:
+    path: "~/T-NSA-700/"
+  register: app_data
+
+- name: "Report if app existed"
+  debug:
+    msg: "The back folder existed at ~/T-NSA-700/"
+  when: app_data.stat.exists
+
+- name: Copy front-end files to remote server
+  become_user: nsa
+  copy:
+    src:  ../../../app/front
+    dest: "~/T-NSA-700/"
+  when: app_data.stat.exists == False
+
+
+- name: Go to T-NSA-700/front directory
+  become_user: nsa
+  become: yes
+  shell: cd ~/T-NSA-700/front
+
+- name: Install front-end dependencies
+  become_user: nsa
+  become: yes
+  shell: "/bin/bash -c 'cd ~/T-NSA-700/front && source ~/.nvm/nvm.sh && npm install'"
+  args:
+    executable: /bin/bash
+  environment:
+    HOME: "/home/nsa"
+
+- name: Run npm run build
+  become_user: nsa
+  shell: |
+    source ~/.nvm/nvm.sh
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    cd ~/T-NSA-700/front
+    npm run build
+  args:
+    executable: /bin/bash

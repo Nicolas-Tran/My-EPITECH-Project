@@ -1,0 +1,7 @@
+---
+- name: "CD front VM"
+  hosts: "front"
+  become: true
+  roles:
+    - cd_front
+...

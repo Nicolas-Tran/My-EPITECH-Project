@@ -1,0 +1,7 @@
+---
+- name: "CD Backend VM"
+  hosts: "back"
+  become: true
+  roles:
+    - cd_back
+...

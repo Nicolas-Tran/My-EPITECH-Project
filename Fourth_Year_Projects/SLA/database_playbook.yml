@@ -1,0 +1,6 @@
+---
+- name: "Template VM"
+  hosts: "db"
+  become: true
+  roles:
+    - mysql

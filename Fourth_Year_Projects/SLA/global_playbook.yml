@@ -1,0 +1,6 @@
+---
+- name: "Template VM"
+  hosts: "front:back:db"
+  become: true
+  roles:
+    - ssh

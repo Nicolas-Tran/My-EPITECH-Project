@@ -1,0 +1,51 @@
+---
+
+- name: "Create .ssh directory"
+  file:
+    path: "/home/{{ ansible_ssh_user }}/.ssh"
+    state: directory
+
+- name: "Create empty authorized_keys file"
+  file:
+    path: "/home/{{ ansible_ssh_user }}/.ssh/authorized_keys"
+    state: touch
+
+- name: "Include ssh public key file"
+  include_vars:
+    file: ssh_public_key.yml
+
+#- name: "Print variable"
+#  debug:
+#    var: publicKey
+
+- name: "Insert public key"
+  lineinfile:
+    path: "/home/{{ ansible_ssh_user }}/.ssh/authorized_keys"
+    line: "{{ publicKey }}"
+
+
+- name: "Ensure SSH configuration options are uncommented"
+  ansible.builtin.blockinfile:
+    path: "/etc/ssh/sshd_config"
+    block: |
+      Port 22
+      PubkeyAuthentication yes
+      AuthorizedKeysFile .ssh/authorized_keys
+    insertafter: EOF
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+    backup: yes
+    state: present
+    create: yes
+    marker_begin: "# BEGIN ANSIBLE MANAGED BLOCK"
+    marker_end: "# END ANSIBLE MANAGED BLOCK"
+  become: yes
+  become_user: root
+  register: ssh_config_update
+
+- name: "Restart SSH service if changes were made"
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  when: ssh_config_update.changed
+  become: yes
+  become_user: root

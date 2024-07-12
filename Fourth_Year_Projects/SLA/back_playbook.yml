@@ -1,0 +1,9 @@
+---
+- name: "Backend VM"
+  hosts: "back"
+  become: true
+  roles:
+    - nginx
+    - php
+    - composer
+...

@@ -1,0 +1,8 @@
+<VirtualHost *:80>
+    ServerName toto-society.live 
+    DocumentRoot /home/nsa/T-NSA-700/front
+    <Directory /home/nsa/T-NSA-700/front>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

@@ -1,0 +1,51 @@
+---
+- name: Install Apache
+  apt:
+    name: apache2
+    state: present
+
+- name: Enable Apache modules
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - rewrite
+    - headers
+    - proxy
+    - proxy_http
+
+# - name: Restart Apache
+#   service:
+#     name: apache2
+#     state: restarted
+
+- name: Configure Apache Virtual Host
+  template:
+    src: ../apache.conf.j2
+    dest: /etc/apache2/sites-available/angular-app.conf
+  # notify: Restart Apache
+
+- name: Enable Apache Virtual Host
+  apache2_module:
+    state: present
+    name: proxy_http
+  # notify: Restart Apache  
+
+- name: Move dist folder to Apache document root
+  become: yes
+  shell: "mv /home/nsa/T-NSA-700/front/dist/front/* /var/www/html/"
+
+
+- name: Set ownership and permissions for the project directory
+  file:
+    path: "/var/www/html/"
+    owner: "www-data"
+    group: "www-data"
+    mode: "0755"
+    recurse: yes
+
+
+- name: Restart Apache after deploying the app
+  service:
+    name: apache2
+    state: restarted
