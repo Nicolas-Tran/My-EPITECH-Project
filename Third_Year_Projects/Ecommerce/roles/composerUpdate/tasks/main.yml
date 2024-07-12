@@ -1,0 +1,6 @@
+- name: Composer update
+  command:
+    cmd: composer update
+    chdir: /var/www/app
+  become: true
+  become_user: "{{ host_user }}"

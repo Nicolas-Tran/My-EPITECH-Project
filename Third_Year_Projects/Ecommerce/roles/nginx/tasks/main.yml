@@ -1,0 +1,44 @@
+- name: "Install NGINX"
+  apt: name=nginx state=present
+
+- name: "Enable NGINX service"
+  systemd:
+    name: nginx
+    enabled: yes
+
+- name: Set owner and group for /var/www
+  file:
+    path: /var/www
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: "Verify if app existed"
+  stat:
+    path: "/var/www/app"
+  register: app_data
+
+- name: "Report if app existed"
+  debug:
+    msg: "The app folder existed at /var/www"
+  when: app_data.stat.exists
+
+- name: "Create directory for server block configuration"
+  file:
+    path: /etc/nginx/conf.d
+    state: directory
+    mode: '0755'
+
+- name: "Configuration for server block"
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/conf.d/nginx.conf
+    mode: '0644'
+
+- name: "stop apache2"
+  systemd:
+    name: apache2
+    state: stopped
+
+- name: Start the Nginx service
+  action: service name=nginx state=restarted enabled=yes

@@ -1,0 +1,390 @@
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+.card-container.card {
+  max-width: 350px !important;
+  padding: 40px 40px;
+}
+
+.card {
+  background-color: #f7f7f7;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  margin-top: 50px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.profile-img-card {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+}
+
+.list {
+  text-align: left;
+  max-width: 750px;
+  margin: auto;
+}
+
+.submit-form {
+  max-width: 300px;
+  margin: auto;
+}
+
+.edit-form {
+  max-width: 300px;
+  margin: auto;
+}
+
+.jobBox {
+  display: flex;
+  /* border: 1px solid rgb(255, 0, 0); */
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.jobBox-company {
+  display: flex;
+  border: 1px solid black;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.advertismentBlock {
+  display: flex;
+  /* border: 3px solid black; */
+  border-radius: 1px;
+  padding: 20px;
+  margin: 5px
+}
+
+.leftSide {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+
+#rightSide {
+  border: 1px solid white;
+  border-radius: 15px;
+  width: 100vw;
+  height: 85vh;
+  margin: 0px 0px 0px 20px;
+  padding: 10px;
+  background-color: rgba(143, 167, 184, 0.493);
+  position: sticky;
+  top: 20px;
+  overflow: auto;
+  
+}
+table{
+  font-size: 10px;
+}
+
+.secondBlock button {
+  text-decoration: none;
+  color: black;
+  border-radius: 9px;
+  background: linear-gradient(white, rgb(212, 212, 212));
+}
+
+/* css for forms */
+label,
+textarea {
+  font-size: .8rem;
+  letter-spacing: 1px;
+}
+
+textarea {
+  padding: 10px;
+  max-width: 100%;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Profile page  */
+
+.jumbotron {
+  text-align: center;
+}
+
+
+.connected-navbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-navbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.admin-navbar {
+  display: flex;
+  flex-direction: row;
+}
+
+/* CSS for table */
+
+table, th, td {
+  border: 1px solid;
+}
+
+table {
+  width: 100%;
+  /* table-layout:fixed; */
+  text-align: center;
+  word-wrap:break-word;
+  overflow: hidden;
+}
+.scrollbar
+{
+	float: left;
+	height: 100%;
+	width: 100%;
+	overflow-y: scroll;
+}
+#style-1::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #9e9ac200;
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
+/* Alert message popup */
+.alert.alert-success {
+  background-color: rgba(227, 253, 235, 1);
+  border-color: rgba(38, 179, 3, 1);
+  color: rgba(60, 118, 61, 1);
+}
+
+/* page sécurisé CSS */
+
+@keyframes slide {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -120px 60px;
+  }
+}
+
+#InfoBanner{
+  margin-bottom: 10px;
+  position: absolute;
+  left: -15px;
+  top: 115px;
+  text-align: center;
+  width: 100%;
+}
+
+.reversed {
+  display: inline-block;
+  padding: 0.3em;
+  padding-left: 0.3em;
+  margin-left: 0.8em;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1;
+  color: #fff;
+  font-size: 15px;
+  background-color:#ef5350;
+}
+.reversed:before, .reversed:after {
+  content: '';
+  width: 0;
+  height: 0;
+  right: -0.8em;
+  position: absolute;
+  top: 0;
+  border-top: 0.8em solid #ef5350;
+}
+.reversed:after {
+  top: auto;
+  bottom: 0;
+  border-top: none;
+  border-bottom: 0.8em solid #ef5350;
+}
+.reversedRight:before, .reversedRight:after{
+  border-right: 0.8em solid transparent;
+  right: -0.8em;
+}
+.reversedRight{
+  width: 17px;
+  border-radius: 5px 0px 0px 5px;
+  animation: tilt 3s infinite;
+}
+@keyframes tilt {
+  0% {
+    left: 0%;
+  }
+  50% {
+    left: 7px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+.reversedLeft{
+  margin-left:15px;
+  border-radius: 0px 5px 5px 0px;
+}
+.reversedLeft:before, .reversedLeft:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 0.8em solid transparent;
+  left: -0.8em;
+  position: absolute;
+}
+.reversedLeft:after {
+  top: auto;
+  bottom: 0;
+  border-top: 0.8em solid #ef5350;
+  border-bottom: none;
+}
+.reversedLeft:before {
+  bottom: auto;
+  top:0;
+  border-bottom: 0.8em solid #ef5350;
+  border-top: none;
+}
+
+.bgAnimation{
+  background-color:#ef5350;
+  background-image: linear-gradient(
+    45deg,
+    #e57373 25%,
+    transparent 25%,
+    transparent 75%,
+    #e57373 75%,
+    #e57373
+  ),linear-gradient(
+    -45deg,
+    #e57373 25%,
+    transparent 25%,
+    transparent 75%,
+    #e57373 75%,
+    #e57373
+  );
+  background-size: 60px 60px;
+  animation: slide 4s infinite linear;
+}
+
+.ErrorPage{
+  height: 100vh;
+}
+/* /// */
+
+#rightSide-company {
+  border: 1px solid blue;
+  border-radius: 15px;
+  width: 100vw;
+  background: linear-gradient(to right, rgb(0, 183, 255), rgb(66, 141, 255));
+  height: 100vh;
+  margin: 0px 0px 0px 20px;
+  padding: 10px;
+  position: sticky;
+}
+
+body {
+  background: #e6e6e1;
+  width: 100%;
+  height: 100vh;
+}
+
+/* /// */
+
+.navbar {
+  background-color: red;
+}
+
+.advertismentBlock {
+  /* background: linear-gradient(to right,  #3f4958, rgba(6, 25, 61, 0.226)); */
+  border-radius: 10px;
+  box-shadow: inset 5px 0 15px -2px #29627e;
+ width: 100%;
+}
+
+.image{
+  width: 100px;
+  border-radius: 50%;
+}
+.jobBtn{
+  float: right;
+}
+.littleBlock{
+  display: flex;
+}
+.secondBlock{
+  display: flex;
+}
+.lesBtn{
+  display: flex;
+  align-items: flex-end;
+}
+.shortDescription{
+display: flex;
+align-items: center;
+
+}
+.deleteBtn{
+  display: flex;
+  align-items: flex-start;
+  position: absolute;
+}
+.mainImg{
+  width: 99.2vw;
+  height: 100vh;
+  /* position: absolute; */
+}
+.maincss{
+  overflow: hidden;
+}
+.center {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  color: #e9dede;
+}
+.navbar{
+  position: sticky;
+  top: 0px;
+}
+.addoffer{
+  margin-left: 40%;
+}

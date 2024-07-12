@@ -1,0 +1,30 @@
+// Before starting, make sure you have the following installed:
+
+APT based Linux system
+cURL
+PHP 7.2 or later
+Composer
+
+// install Symfony 6 via APT based Linux
+
+    curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+
+    sudo apt install symfony-cli
+
+// IF the symfony app exist in the current directory then igniore the next step (go to "run symfony application")
+
+// create a new Symfony 6 project
+
+    symfony new app --version="6.2.*"
+
+// run symfony application
+
+    cd app/
+
+    symfony server:start
+
+// open browser and go to http://localhost:8000/ to see the Symfony 6 welcome page
+
+// stop symfony application
+
+    symfony server:stop

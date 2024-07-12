@@ -1,0 +1,30 @@
+- name: curl Package
+  shell: curl -sSL https://packages.sury.org/php/README.txt | sudo bash -x
+
+- name: Update apt-get repo and cache
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Pause until you can verify updates to an application were successful
+  ansible.builtin.pause:
+  
+- name: install PHP8
+  apt: name={{ item }} state=latest
+  with_items:
+    - php8.1
+    - libapache2-mod-php8.1
+    - php8.1-common
+    - php8.1-curl
+    - php8.1-bcmath
+    - php8.1-intl
+    - php8.1-mbstring
+    - php8.1-xmlrpc
+    - php8.1-mcrypt
+    - php8.1-mysql
+    - php8.1-gd
+    - php8.1-xml
+    - php8.1-cli
+    - php8.1-zip
+    - php8.1-fpm
+    - libapache2-mod-fcgid
+    - git
+    - unzip

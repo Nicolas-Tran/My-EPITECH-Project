@@ -1,0 +1,25 @@
+- hosts: web
+  gather_facts: yes
+  become: true
+  become_method: sudo
+  vars_files:
+    - vars.yml
+
+  roles:
+    - defaultPackages
+    - php
+    - symfony
+    - composer
+    - python
+    - mysql
+    - updateCache
+    - copy
+    - composerUpdate
+    - db
+    - updateCache
+    - nginx
+
+    #mkdir /var/run/php
+    #touch /var/run/php/php8.1-fpm.sock
+    #chown www-data:www-data /var/run/php/php8.1-fpm.sock
+    #systemctl restart php8.1-fpm

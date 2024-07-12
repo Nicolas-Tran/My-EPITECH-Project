@@ -1,0 +1,5 @@
+[client]
+user=app_user
+password=app_password
+host=db
+port=3306

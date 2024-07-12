@@ -1,0 +1,15 @@
+global:
+  slack_api_url: 'https://hooks.slack.com/services/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'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10m
+  repeat_interval: 1h
+  receiver: 'slack-notifications'
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#grafana'
+    send_resolved: true
+    text: "Alerte: {{ .CommonAnnotations.summary }}\nDescription: {{ .CommonAnnotations.description }}"

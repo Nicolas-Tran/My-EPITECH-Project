@@ -1,0 +1,178 @@
+version: '3'
+services:
+  traefik:
+    image: "traefik:v2.4"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.metrics.address=:8082"
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.entryPoint=metrics"
+ 
+    ports:
+      - "80:80"
+      - "8082:8082"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+ 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      APP_DEBUG: "true"
+      APP_ENV: "local"
+      APP_KEY: "base64:DJYTvaRkEZ/YcQsX3TMpB0iCjgme2rhlIOus9A1hnj4="
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: app_database
+      DB_USERNAME: app_user
+      DB_PASSWORD: app_password
+    depends_on:
+      - db
+    volumes:
+      - ./logs/webapp:/var/log
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`localhost`)"
+
+  php-fpm-exporter:
+    image: hipages/php-fpm_exporter
+    ports:
+      - "9253:9253"
+    environment:
+      PHP_FPM_SCRAPE_URI: "http://localhost:9000/status"
+    depends_on:
+      - app
+ 
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: app_database
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+      MYSQL_ROOT_PASSWORD: app_root_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./logs/dblogs:/var/log
+
+  mysqld-exporter:
+    image: prom/mysqld-exporter
+    ports:
+      - "9104:9104"
+    volumes:
+      - ./mysql-exporter.cnf:/etc/mysql-exporter/mysql-exporter.cnf
+    command:
+      - '--config.my-cnf=/etc/mysql-exporter/mysql-exporter.cnf'
+
+ 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert.rules:/etc/prometheus/alert.rules
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    links:
+      - alertmanager:alertmanager
+    labels:
+      - "traefik.http.routers.prometheus.service=prometheus"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+ 
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+
+
+  alertmanager:
+    image: prom/alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - '9093:9093'
+
+
+  nodeexporter:
+    image: prom/node-exporter
+    ports:
+      - "9200:9200"
+    volumes:
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/:/rootfs:ro"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points'
+      - '^/(sys|proc|dev|host|etc)($$|/)'
+  
+  cadvisor:
+    image: gcr.io/google-containers/cadvisor:v0.36.0
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+    ports:
+      - "8080:8080"
+    restart: always
+    container_name: cadvisor
+    labels:
+      org.label-schema.group: "monitoring"
+    environment:
+      - CADVISOR_HEALTHCHECK_URL=http://localhost:8080/healthz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yml
+    command: -config.file=/etc/loki/local-config.yml
+      
+  promtail:
+    image: grafana/promtail
+    ports:
+      - "9080:9080"
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/config.yml
+      - ./logs/webapp:/var/log/webapp
+      - ./logs/dblogs:/var/log/dblogs
+    command: -config.file=/etc/promtail/config.yml
+
+ 
+volumes:
+  db_data:
+    driver: local
+  grafana_data:
+  alertmanager-data:
+  prometheus_data:
+  

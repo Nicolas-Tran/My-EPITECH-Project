@@ -1,0 +1,6 @@
+- name: Create install directory
+  synchronize:
+    src: App/
+    dest: /var/www/app
+    rsync_opts:
+      - "--chmod=F755"

@@ -1,0 +1,7 @@
+- name: Install Symfony stage 1
+  shell: curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+
+- name: Install Symfony stage 2
+  apt: name="{{ item }}" update_cache=yes state=latest
+  with_items:
+    - symfony-cli

@@ -1,0 +1,17 @@
+- name: Pause until you can verify updates to an application were successful
+  ansible.builtin.pause:
+
+- name: Update apt-get repo and cache
+  become: yes
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: install packages
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - ca-certificates
+    - apt-transport-https
+    - software-properties-common
+    - wget
+    - curl
+    - lsb-release
+    - python3-pip

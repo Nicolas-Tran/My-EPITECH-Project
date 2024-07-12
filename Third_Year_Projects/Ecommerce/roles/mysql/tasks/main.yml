@@ -1,0 +1,11 @@
+- name: Install & Start MySQL server
+  apt: name="{{ item }}" update_cache=yes state=latest
+  with_items:
+    - mariadb-server
+    - mariadb-client
+
+- name: pip install mysqlclient
+  shell: pip install mysqlclient
+
+- name: Start the MySQL service
+  action: service name=mysql state=started enabled=yes

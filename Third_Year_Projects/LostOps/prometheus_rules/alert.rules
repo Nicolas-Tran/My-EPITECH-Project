@@ -1,0 +1,12 @@
+groups:
+- name: instance-monitoring
+  rules:
+  - alert: SampleAppDBDown
+    expr: up{"sample-app-db-1"} == 0
+    for: 15s  # Ajusté à 15 secondes pour correspondre à un intervalle de scrapping commun
+    labels:
+      severity: critical
+    annotations:
+      summary: "sample-app-db-1 is down"
+      description: "The container sample-app-db-1 has been down for more than 15 seconds."
+

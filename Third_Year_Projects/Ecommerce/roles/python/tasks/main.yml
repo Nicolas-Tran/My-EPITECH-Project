@@ -1,0 +1,7 @@
+- name: install python, pip etc
+  shell: apt-get -y install "{{ item }}"
+  with_items:
+    - pip
+    - python3-dev
+    - default-libmysqlclient-dev
+    - build-essential

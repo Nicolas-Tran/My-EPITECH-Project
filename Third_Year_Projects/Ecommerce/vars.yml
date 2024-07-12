@@ -1,0 +1,5 @@
+new_mysql_root_password: root
+mysqlsoftware:
+  - mysql-server
+  - mysql-client
+host_user: user

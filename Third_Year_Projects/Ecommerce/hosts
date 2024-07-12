@@ -1,0 +1,8 @@
+[web:vars]
+ansible_ssh_private_key_file=./TimeManagerKey.pem
+
+[web]
+YOUR_IP_ADDRESS ansible_user=YOUR_USER
+
+[VM2]
+YOUR_IP_ADDRESS ansible_user=YOUR_USER
